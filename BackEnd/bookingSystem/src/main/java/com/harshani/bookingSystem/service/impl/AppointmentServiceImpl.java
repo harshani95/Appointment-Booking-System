@@ -1,0 +1,91 @@
+package com.harshani.bookingSystem.service.impl;
+
+import com.harshani.bookingSystem.dto.request.RequestAppointmentDto;
+import com.harshani.bookingSystem.dto.response.ResponseAppointmentDto;
+import com.harshani.bookingSystem.entity.Appointment;
+import com.harshani.bookingSystem.exception.EntryNotFoundException;
+import com.harshani.bookingSystem.repo.AppointmentRepo;
+import com.harshani.bookingSystem.service.AppointmentService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@RequiredArgsConstructor
+@Service
+public class AppointmentServiceImpl implements AppointmentService {
+
+    private final AppointmentRepo appointmentRepo;
+
+    @Override
+    public void saveAppointment(RequestAppointmentDto appointmentDto) {
+
+        Appointment appointment = new Appointment(
+                appointmentDto.getUsername(),
+                appointmentDto.getContact(),
+                appointmentDto.getDate(),
+                appointmentDto.getTime()
+        );
+
+       appointmentRepo.save(appointment);
+
+    }
+
+    @Override
+    public void deleteAppointment(long id) {
+        Optional<Appointment> selectedAppointment = appointmentRepo.findById(id);
+        if(selectedAppointment.isEmpty()){
+            throw new EntryNotFoundException("Not Assign Appointment");
+        }
+        appointmentRepo.deleteById(selectedAppointment.get().getId());
+    }
+
+    @Override
+    public List<ResponseAppointmentDto> getAllAppointments() {
+        List<Appointment> appointmentList = appointmentRepo.findAll();
+        List<ResponseAppointmentDto> responseAppointmentDtos = new ArrayList<>();
+
+        for (Appointment appointment:appointmentList){
+            ResponseAppointmentDto responseAppointmentDto =new ResponseAppointmentDto(
+                    appointment.getId(),
+                    appointment.getUsername(),
+                    appointment.getContact(),
+                    appointment.getDate(),
+                    appointment.getTime()
+                    );
+            responseAppointmentDtos.add(responseAppointmentDto);
+        }
+        return responseAppointmentDtos;
+    }
+
+
+    public List<LocalTime> getAllTimeSlots() {
+        List<LocalTime> slots = new ArrayList<>();
+        LocalTime start = LocalTime.of(10,0);
+        LocalTime end = LocalTime.of(17,0);
+
+        while (start.isBefore(end)){
+            slots.add(start);
+            start = start.plusMinutes(60);
+        }
+        return slots;
+    }
+
+    @Override
+    public List<LocalTime> getAvailableTimeSlots(LocalDate date) {
+        List<Appointment> bookedAppointments = appointmentRepo.findByDate(date);
+        List<LocalTime> bookedSlots = bookedAppointments.stream()
+                .map(Appointment::getTime)
+                .collect(Collectors.toList());
+
+        return getAllTimeSlots().stream()
+                .filter(slot -> !bookedSlots.contains(slot))
+                .collect(Collectors.toList());
+    }
+
+}
