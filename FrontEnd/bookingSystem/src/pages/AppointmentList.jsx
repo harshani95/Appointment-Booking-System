@@ -5,16 +5,28 @@ const AppointmentList = () => {
   const [appointments, setAppointments] = useState([]);
 
   useEffect(() => {
-    getAppontments();
+    getAppointments();
   }, []);
 
-  const getAppontments = async () => {
+  const getAppointments = async () => {
     const response = await axios.get(
       "http://localhost:8081/api/v1/appointments"
     );
     setAppointments(response.data.data);
 
     console.log("Appointments:", response.data);
+  };
+
+  const deleteAppointment = async (id) => {
+    try {
+      await axios.delete(
+        `http://localhost:8081/api/v1/delete/appointments/${id}`
+      );
+      alert("Appointment deleted successfully!");
+      getAppointments();
+    } catch (error) {
+      console.error("Error deleting appointment:", error);
+    }
   };
 
   return (
@@ -39,13 +51,20 @@ const AppointmentList = () => {
               {appointments.map((appointment, index) => (
                 <tr key={index}>
                   <td className="py-1 px-6 border-b">{appointment.id}</td>
-                  <td className="py-1 px-6 border-b">{appointment.username}</td>
+                  <td className="py-1 px-6 border-b">{appointment.name}</td>
                   <td className="py-1 px-6 border-b">{appointment.contact}</td>
                   <td className="py-1 px-6 border-b">{appointment.date}</td>
                   <td className="py-1 px-6 border-b">{appointment.time}</td>
 
                   <td className="py-2 px-6 text-left border-b">
-                    <button className="text-white bg-red-500  font-medium rounded-lg px-2 py-2 text-center mr-2 mb-2">
+                    <button
+                      className="text-white bg-red-500  font-medium rounded-lg px-2 py-2 text-center mr-2 mb-2"
+                      onClick={() => {
+                        if (confirm("are you sure?")) {
+                          deleteAppointment(appointment.id);
+                        }
+                      }}
+                    >
                       Cancel
                     </button>
                   </td>
