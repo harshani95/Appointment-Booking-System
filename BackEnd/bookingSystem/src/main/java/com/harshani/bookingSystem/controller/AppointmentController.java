@@ -17,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1")
+@CrossOrigin(origins = "http://localhost:5173")
 public class AppointmentController {
 
     private final AppointmentServiceImpl appointmentService;
@@ -35,7 +36,7 @@ public class AppointmentController {
         appointmentService.deleteAppointment(id);
         return new ResponseEntity<>(
                 new StandardResponse(204, "Deleted data",id),
-                HttpStatus.NO_CONTENT
+                HttpStatus.OK
         );
     }
 

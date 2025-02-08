@@ -17,13 +17,13 @@ public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String username;
+    private String name;
     private String contact;
     private LocalDate date;
     private LocalTime time;
 
-    public Appointment(String username, String contact, LocalDate date, LocalTime time) {
-        this.username = username;
+    public Appointment(String name, String contact, LocalDate date, LocalTime time) {
+        this.name = name;
         this.contact = contact;
         this.date = date;
         this.time = time;

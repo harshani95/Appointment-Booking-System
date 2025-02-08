@@ -11,7 +11,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @Data
 public class RequestAppointmentDto {
-    private String username;
+    private String name;
     private String contact;
     private LocalDate date;
     private LocalTime time;

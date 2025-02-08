@@ -26,7 +26,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     public void saveAppointment(RequestAppointmentDto appointmentDto) {
 
         Appointment appointment = new Appointment(
-                appointmentDto.getUsername(),
+                appointmentDto.getName(),
                 appointmentDto.getContact(),
                 appointmentDto.getDate(),
                 appointmentDto.getTime()
@@ -53,7 +53,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         for (Appointment appointment:appointmentList){
             ResponseAppointmentDto responseAppointmentDto =new ResponseAppointmentDto(
                     appointment.getId(),
-                    appointment.getUsername(),
+                    appointment.getName(),
                     appointment.getContact(),
                     appointment.getDate(),
                     appointment.getTime()

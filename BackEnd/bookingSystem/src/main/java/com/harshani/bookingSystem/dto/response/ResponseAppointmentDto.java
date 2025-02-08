@@ -12,7 +12,7 @@ import java.time.LocalTime;
 @Data
 public class ResponseAppointmentDto {
     private Long id;
-    private String username;
+    private String name;
     private String contact;
     private LocalDate date;
     private LocalTime time;
