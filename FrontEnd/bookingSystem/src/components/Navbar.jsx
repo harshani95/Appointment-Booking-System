@@ -3,7 +3,9 @@ const Navbar = () => {
     <>
       <nav className="bg-gray-800 text-white p-3">
         <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Appointment Booking System</h1>
+          <h1 className="text-2xl font-bold">
+            <a href="/">Appointment Booking System</a>
+          </h1>
           <ul className="flex space-x-6">
             <li>
               <a href="/appointment-list">All Appointments</a>
