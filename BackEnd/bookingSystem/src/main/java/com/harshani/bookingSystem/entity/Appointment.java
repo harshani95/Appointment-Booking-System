@@ -13,7 +13,7 @@ import java.time.LocalTime;
 @ToString
 @Entity
 @Table(name = "appointment")
-public class Appointment {
+public class Appointment{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
