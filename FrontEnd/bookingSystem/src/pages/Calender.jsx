@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const Calander = () => {
+const Calender = () => {
   const [slots, setSlots] = useState([]);
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0]
@@ -79,4 +79,4 @@ const Calander = () => {
   );
 };
 
-export default Calander;
+export default Calender;

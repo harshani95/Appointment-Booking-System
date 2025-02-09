@@ -14,7 +14,7 @@ const Navbar = () => {
               <a href="/add-appointment">Add Appointment</a>
             </li>
             <li>
-              <a href="/calander">Calander</a>
+              <a href="/calender">Calender</a>
             </li>
           </ul>
         </div>
