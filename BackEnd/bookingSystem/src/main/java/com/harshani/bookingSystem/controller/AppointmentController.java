@@ -22,7 +22,7 @@ public class AppointmentController {
 
     private final AppointmentServiceImpl appointmentService;
 
-    @PostMapping(path = "/appointments")
+    @PostMapping(path = "/user/appointments")
     public ResponseEntity<StandardResponse> saveAppointment(@RequestBody RequestAppointmentDto appointmentDto){
         appointmentService.saveAppointment(appointmentDto);
         return new ResponseEntity<>(
@@ -31,7 +31,7 @@ public class AppointmentController {
         );
     }
 
-    @DeleteMapping("/delete/appointments/{id}")
+    @DeleteMapping("/admin/delete/appointments/{id}")
     public ResponseEntity<StandardResponse> deleteAppointment(@PathVariable(value = "id") long id){
         appointmentService.deleteAppointment(id);
         return new ResponseEntity<>(
@@ -40,7 +40,8 @@ public class AppointmentController {
         );
     }
 
-    @GetMapping(path = "/appointments")
+
+    @GetMapping(path = "/admin/appointments")
     public ResponseEntity<StandardResponse> getAllAppointments() {
         List<ResponseAppointmentDto> allAppointments = appointmentService.getAllAppointments();
 
@@ -50,7 +51,7 @@ public class AppointmentController {
         );
     }
 
-    @GetMapping("/slots")
+    @GetMapping("/admin-user/slots")
     public ResponseEntity<StandardResponse> getAvailableSlots(@RequestParam String date) {
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 

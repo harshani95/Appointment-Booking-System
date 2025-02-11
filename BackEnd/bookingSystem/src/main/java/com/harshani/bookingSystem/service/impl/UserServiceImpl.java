@@ -4,14 +4,12 @@ import com.harshani.bookingSystem.dto.request.RequestUserDto;
 import com.harshani.bookingSystem.entity.User;
 import com.harshani.bookingSystem.repo.UserRepo;
 import com.harshani.bookingSystem.service.UserService;
-import com.harshani.bookingSystem.util.JWTUtil;
+import com.harshani.bookingSystem.util.JWTUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
 
 @RequiredArgsConstructor
 @Service
@@ -19,7 +17,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
-    private final JWTUtil jwtUtil;
+    private final JWTUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
 
     @Override
@@ -45,7 +43,7 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepo.findByEmail(userDto.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
 
-        String jwt = jwtUtil.generateToken(user);
+        String jwt = jwtUtils.generateToken(user);
         return jwt;
     }
 

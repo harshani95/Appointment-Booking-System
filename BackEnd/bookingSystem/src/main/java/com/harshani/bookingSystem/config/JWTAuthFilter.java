@@ -1,7 +1,7 @@
 package com.harshani.bookingSystem.config;
 
 import com.harshani.bookingSystem.service.impl.ApplicationUserServiceImpl;
-import com.harshani.bookingSystem.util.JWTUtil;
+import com.harshani.bookingSystem.util.JWTUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +21,7 @@ import java.io.IOException;
 @Component
 public class JWTAuthFilter extends OncePerRequestFilter {
 
-    private final JWTUtil jwtUtil;
+    private final JWTUtils jwtUtils;
     private final ApplicationUserServiceImpl applicationUserService;
 
     @Override
@@ -36,12 +36,12 @@ public class JWTAuthFilter extends OncePerRequestFilter {
         }
 
         jwtToken = authorizationHeader.substring(7);
-        username = jwtUtil.extractUsername(jwtToken);
+        username = jwtUtils.extractUsername(jwtToken);
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = applicationUserService.loadUserByUsername(username);
 
-            if (jwtUtil.isTokenValid(jwtToken, userDetails)) {
+            if (jwtUtils.isTokenValid(jwtToken, userDetails)) {
                 SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
                 UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
