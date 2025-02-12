@@ -55,10 +55,13 @@ class UserService {
     }
 
 
-    static async getTimeSlots(token) {
+    static async getTimeSlots( date, token) {
         try {
             const response = await axios.get(`${UserService.BASE_URL}/admin-user/slots`, {
-                headers: { Authorization: `Bearer ${token}` }
+               
+                headers: { Authorization: `Bearer ${token}` },
+                params: { date }
+                
             });
             return response.data;
         } catch (err) {
@@ -83,29 +86,12 @@ class UserService {
    
      static logout() {
         localStorage.removeItem("token");
-        localStorage.removeItem("role");
     }
 
 
     static isAuthenticated() {
         const token = localStorage.getItem("token");
         return !!token;
-    }
-
-    static isAdmin() {
-        const role = localStorage.getItem("role");
-        return role === "ADMIN";
-    }
-
-
-    static isUser() {
-        const role = localStorage.getItem("role");
-        return role === "USER";
-    }
-
-
-    static adminOnly() {
-        return this.isAuthenticated() && this.isAdmin();
     }
 }
 
