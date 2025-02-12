@@ -1,5 +1,5 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
+import UserService from "../service/UserService";
 
 const AppointmentList = () => {
   const [appointments, setAppointments] = useState([]);
@@ -9,19 +9,24 @@ const AppointmentList = () => {
   }, []);
 
   const getAppointments = async () => {
-    const response = await axios.get(
-      "http://localhost:8081/api/v1/appointments"
-    );
-    setAppointments(response.data.data);
+    try {
+      const token = localStorage.getItem("token");
+      console.log("Token:", token);
+      const response = await UserService.getAllAppointments(token);
 
-    console.log("Appointments:", response.data);
+      console.log("Appointments:", response.data);
+
+      const data = response.data?.data || response.data;
+      setAppointments(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const deleteAppointment = async (id) => {
     try {
-      await axios.delete(
-        `http://localhost:8081/api/v1/delete/appointments/${id}`
-      );
+      const token = localStorage.getItem("token");
+      await UserService.deleteAppointment(id, token);
       alert("Appointment deleted successfully!");
       getAppointments();
     } catch (error) {
@@ -48,28 +53,38 @@ const AppointmentList = () => {
               </tr>
             </thead>
             <tbody>
-              {appointments.map((appointment, index) => (
-                <tr key={index}>
-                  <td className="py-1 px-6 border-b">{appointment.id}</td>
-                  <td className="py-1 px-6 border-b">{appointment.name}</td>
-                  <td className="py-1 px-6 border-b">{appointment.contact}</td>
-                  <td className="py-1 px-6 border-b">{appointment.date}</td>
-                  <td className="py-1 px-6 border-b">{appointment.time}</td>
+              {appointments.length > 0 ? (
+                appointments.map((appointment, index) => (
+                  <tr key={index}>
+                    <td className="py-1 px-6 border-b">{appointment.id}</td>
+                    <td className="py-1 px-6 border-b">{appointment.name}</td>
+                    <td className="py-1 px-6 border-b">
+                      {appointment.contact}
+                    </td>
+                    <td className="py-1 px-6 border-b">{appointment.date}</td>
+                    <td className="py-1 px-6 border-b">{appointment.time}</td>
 
-                  <td className="py-2 px-6 text-left border-b">
-                    <button
-                      className="text-white bg-red-500  font-medium rounded-lg px-2 py-2 text-center mr-2 mb-2"
-                      onClick={() => {
-                        if (confirm("are you sure?")) {
-                          deleteAppointment(appointment.id);
-                        }
-                      }}
-                    >
-                      Cancel
-                    </button>
+                    <td className="py-2 px-6 text-left border-b">
+                      <button
+                        className="text-white bg-red-500  font-medium rounded-lg px-2 py-2 text-center mr-2 mb-2"
+                        onClick={() => {
+                          if (confirm("are you sure?")) {
+                            deleteAppointment(appointment.id);
+                          }
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="text-center py-4">
+                    No appointments available.
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>

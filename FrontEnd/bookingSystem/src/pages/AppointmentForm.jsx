@@ -1,5 +1,7 @@
-import axios from "axios";
 import { useState } from "react";
+
+import { jwtDecode } from "jwt-decode";
+import UserService from "../service/UserService";
 import { useNavigate } from "react-router-dom";
 
 const AppointmentForm = () => {
@@ -20,18 +22,25 @@ const AppointmentForm = () => {
 
     const formattedTime = time.length === 2 ? `${time}:00:00` : time;
     try {
-      const response = await axios.post(
-        "http://localhost:8081/api/v1/appointments",
-        {
-          name,
-          contact,
-          date,
-          time: formattedTime,
-        }
-      );
+      const token = localStorage.getItem("token");
+      console.log(token);
+      const decodedToken = jwtDecode(token);
+      console.log("Decoded Token:", decodedToken);
+
+      if (decodedToken.role.includes("ADMIN")) {
+        alert("You must be a user to book an appointment!");
+        navigate("/appointment-list");
+      }
+
+      const response = await UserService.saveAppointment(token, {
+        name,
+        contact,
+        date,
+        time: formattedTime,
+      });
+
       alert("Appointment added successfully!");
       console.log("Response:", response.data);
-      navigate("/appointment-list");
     } catch (error) {
       console.error("Error:", error.response?.data || error.message);
     }

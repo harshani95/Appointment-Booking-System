@@ -3,7 +3,9 @@ import Navbar from "./components/Navbar";
 import AppointmentForm from "./pages/AppointmentForm";
 import AppointmentList from "./pages/AppointmentList";
 import Calender from "./pages/Calender";
-import Home from "./pages/Home";
+
+import LoginForm from "./pages/auth/LoginForm";
+import SignUpForm from "./pages/auth/SignUpForm";
 
 function App() {
   return (
@@ -11,10 +13,12 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<LoginForm />} />
           <Route path="/calender" element={<Calender />} />
           <Route path="/add-appointment" element={<AppointmentForm />} />
           <Route path="/appointment-list" element={<AppointmentList />} />
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/signup" element={<SignUpForm />} />
         </Routes>
       </BrowserRouter>
     </>

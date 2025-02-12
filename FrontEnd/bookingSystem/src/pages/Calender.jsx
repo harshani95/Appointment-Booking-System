@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+
 import { useNavigate } from "react-router-dom";
+import UserService from "../service/UserService";
 
 const Calender = () => {
   const [slots, setSlots] = useState([]);
@@ -19,11 +20,12 @@ const Calender = () => {
 
   const getAvailableSlots = async (date) => {
     try {
-      const response = await axios.get(
-        `http://localhost:8081/api/v1/slots?date=${date}`
-      );
-      setSlots(response.data.data || []);
-      console.log(response.data.data);
+      const token = localStorage.getItem("token");
+      console.log(token);
+      const response = await UserService.getTimeSlots(date, token);
+
+      setSlots(response.data || []);
+      console.log(response.data);
     } catch (error) {
       console.log("Error Fetching Slots", error);
       setSlots([]);
@@ -32,7 +34,7 @@ const Calender = () => {
 
   return (
     <>
-      <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg mt-20">
+      <div className="max-w-lg mx-auto p-8 bg-white shadow-lg rounded-lg mt-16 border border-gray-200">
         <h2 className="text-2xl font-bold text-slate-600 mb-4 text-center">
           Available Time Slots
         </h2>
