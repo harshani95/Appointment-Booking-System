@@ -12,8 +12,7 @@ Ensure you have the following installed on your system:
 - Git
 
 ### Clone the Repository
-`git clone https://github.com/harsani95/Appointment-Booking-System.git`<br>
-`cd booking-system`
+`git clone https://github.com/harsani95/Appointment-Booking-System.git`
 
 ### Backend Setup (Spring Boot)
 1. Navigate to the backend directory.<br>
